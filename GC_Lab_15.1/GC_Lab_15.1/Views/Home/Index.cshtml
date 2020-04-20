@@ -1,8 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model CardsList
+@{
+    ViewData["Title"] = "Poke who?";
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
+
+<ul class="list-group list-group-horizontal">
+    @foreach (Card card in Model.Cards)
+    {
+        <li class="list-group-item">
+            <img src="@card.Image" width="100" height="139" alt="@card.Value of @card.Suit" /> <br />
+            @card.Value.ToLower() of @card.Suit.ToLower()
+        </li>
+    }
+</ul>
+@* 226 × 314 *@

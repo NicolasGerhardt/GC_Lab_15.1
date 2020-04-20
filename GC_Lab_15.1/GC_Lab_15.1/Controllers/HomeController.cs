@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using GC_Lab_15._1.Models;
+using System.Net.Http;
 
 namespace GC_Lab_15._1.Controllers
 {
@@ -18,10 +19,27 @@ namespace GC_Lab_15._1.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            // How to get a shuffled deck: https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1
+            // How to draw x number of cards from Deck https://deckofcardsapi.com/api/deck/<<deck_id>>/draw/?count=
+
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://deckofcardsapi.com");
+            // some API's need to have headers set for them. 
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla / 5.0 (compatible, GrandCircus/1.0)");
+
+            var response = await client.GetAsync("api/deck/new/shuffle/?deck_count=1");
+
+            var deck = await response.Content.ReadAsAsync<Deck>();
+
+            response = await client.GetAsync($"api/deck/{deck.Deck_id}/draw/?count=5");
+
+            var cards = await response.Content.ReadAsAsync<CardsList>();
+
+            return View(cards);
         }
+
 
         public IActionResult Privacy()
         {
