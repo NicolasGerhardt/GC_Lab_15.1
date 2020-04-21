@@ -33,9 +33,9 @@ namespace GC_Lab_15._1.Controllers
 
             var deck = await response.Content.ReadAsAsync<Deck>();
 
-            response = await client.GetAsync($"api/deck/{deck.Deck_id}/draw/?count=5");
+            var response2 = await client.GetAsync($"api/deck/{deck.Deck_id}/draw/?count=5");
 
-            var cards = await response.Content.ReadAsAsync<CardsList>();
+            var cards = await response2.Content.ReadAsAsync<CardsList>();
 
             return View(cards);
         }
